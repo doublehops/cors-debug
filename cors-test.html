@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    
+        <title>CORS Test</title>
+    
+        <link rel="stylesheet" href="css/styles.css?v=1.0">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    </head>
+
+    <body>
+        <form id="cors-form">
+            <p>
+                Bearer token: 
+                <input type="text" id="bearer_token" style="width:500px" />
+            </p>
+            <p>
+                Method: 
+                <select id="method">
+                    <option>GET</option>
+                    <option>POST</option>
+                    <option>PATCH</option>
+                    <option>DELETE</option>
+                </select>
+            </p>
+            <p>
+                Endpoint: 
+                <input type="text" id="endpoint" value="http://staging-app-cms.docs.ibaops.net/api/v1/meta" style="width:500px" />
+            </p>
+            <p>
+                <input type="submit" name="submit" value="submit" />
+            </p>
+        <script>
+            window.onload = function() {
+              init();
+            };
+
+            function init() {
+                data = '';
+                $('#cors-form').submit(function(e) {
+                    url = $('#endpoint').val();
+                    $.ajax({
+                      type: $('#method').val(),
+                      beforeSend: function(request) {
+                        request.setRequestHeader("Authorization", 'Bearer '+ $('#bearer_token').val());
+                      },
+                      url: url,
+                      data: data,
+                      success: success,
+                      dataType: 'json'
+                    });
+                    e.preventDefault();
+                });
+            }
+
+            function success() {
+                console.log('success');
+            }
+        </script>
+    </body>
+</html>
