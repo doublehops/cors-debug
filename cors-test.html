@@ -13,6 +13,19 @@
             #status-code {
                 font-weight: bold;
             }
+            dl {
+                  display: grid;
+                  grid-template-columns: max-content auto;
+                  row-gap: 10px;
+            }
+
+            dt {
+                  grid-column-start: 1;
+            }
+
+            dd {
+                  grid-column-start: 2;
+            }
         </style>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script>
@@ -54,23 +67,23 @@
 
     <body>
         <form id="cors-form">
-            <p>
-                Bearer token: 
-                <input type="text" id="bearer_token" style="width:500px" />
-            </p>
-            <p>
-                Method: 
-                <select id="method">
-                    <option>GET</option>
-                    <option>POST</option>
-                    <option>PATCH</option>
-                    <option>DELETE</option>
-                </select>
-            </p>
-            <p>
-                Endpoint: 
-                <input type="text" id="endpoint" value="https://reqres.in/api/users?page=2" style="width:500px" />
-            </p>
+            <dl>
+                <dt>Bearer token:</dt>
+                <dd><input type="text" id="bearer_token" style="width:500px" /></dd>
+                
+                <dt>Method:</dt>
+                <dd><select id="method">
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PATCH</option>
+                        <option>DELETE</option>
+                    </select>
+                </dd>
+
+                <dt>Endpoint:</dt>
+                <dd><input type="text" id="endpoint" value="https://reqres.in/api/users?page=2" style="width:500px" /></dd>
+            </dl>
+            
             <p>
                 <input type="submit" name="submit" value="submit" />
             </p>

@@ -1,4 +1,4 @@
-CORS Test Page.
+CORS Test Page
 ===============
 
 This is a single page script that was designed to test and debug CORS related issues in a standalone environment. CORS debugging can be tricky so this little tool is can be used to isolate any concerns. 
