@@ -5,9 +5,51 @@
         <meta charset="utf-8">
     
         <title>CORS Test</title>
-    
-        <link rel="stylesheet" href="css/styles.css?v=1.0">
+        <style>
+            #response-container {
+                width: 800px;
+                height: 400px;
+            }
+            #status-code {
+                font-weight: bold;
+            }
+        </style>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            window.onload = function() {
+              init();
+            };
+
+            function init() {
+                data = '';
+                $('#cors-form').submit(function(e) {
+                    url = $('#endpoint').val();
+                    $.ajax({
+                      type: $('#method').val(),
+                      beforeSend: function(request) {
+                        request.setRequestHeader("Authorization", 'Bearer '+ $('#bearer_token').val());
+                      },
+                      url: url,
+                      data: data,
+                      success: function(data, statusCode, xhr) {
+                        success(data, statusCode, xhr);
+                      },
+                      dataType: 'json'
+                    });
+                    e.preventDefault();
+                });
+            }
+
+            function success(data, statusCode, xhr) {
+                        console.log('logging: '+ xhr.status);
+                console.log('success');
+                console.log('code: '+ xhr.status);
+                console.log('here now');
+                var dataStr = JSON.stringify(data, undefined, 4);
+                $('#status-code').html(xhr.status);
+                $('#response-container').text(dataStr);
+            }
+        </script>
     </head>
 
     <body>
@@ -27,37 +69,17 @@
             </p>
             <p>
                 Endpoint: 
-                <input type="text" id="endpoint" value="http://staging-app-cms.docs.ibaops.net/api/v1/meta" style="width:500px" />
+                <input type="text" id="endpoint" value="https://reqres.in/api/users?page=2" style="width:500px" />
             </p>
             <p>
                 <input type="submit" name="submit" value="submit" />
             </p>
-        <script>
-            window.onload = function() {
-              init();
-            };
+        </form>
 
-            function init() {
-                data = '';
-                $('#cors-form').submit(function(e) {
-                    url = $('#endpoint').val();
-                    $.ajax({
-                      type: $('#method').val(),
-                      beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", 'Bearer '+ $('#bearer_token').val());
-                      },
-                      url: url,
-                      data: data,
-                      success: success,
-                      dataType: 'json'
-                    });
-                    e.preventDefault();
-                });
-            }
-
-            function success() {
-                console.log('success');
-            }
-        </script>
+        <h3>Response</h3>
+        <p>Status code: <span id="status-code"></span></p>
+        <p>Data: </p>
+        <textarea id="response-container">
+        </textarea>
     </body>
 </html>
