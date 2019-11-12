@@ -6,6 +6,10 @@
     
         <title>CORS Test</title>
         <style>
+            #payload {
+                width: 400px;
+                height: 200px;
+            }
             #response-container {
                 width: 800px;
                 height: 400px;
@@ -34,32 +38,44 @@
             };
 
             function init() {
-                data = '';
+                prepareSubmitForm();
+            }
+
+            function prepareSubmitForm() {
+
                 $('#cors-form').submit(function(e) {
                     url = $('#endpoint').val();
+                    payload = $('#payload').val();
                     $.ajax({
-                      type: $('#method').val(),
-                      beforeSend: function(request) {
-                        request.setRequestHeader("Authorization", 'Bearer '+ $('#bearer_token').val());
-                      },
-                      url: url,
-                      data: data,
-                      success: function(data, statusCode, xhr) {
-                        success(data, statusCode, xhr);
-                      },
-                      dataType: 'json'
+                        type: $('#method').val(),
+                        beforeSend: function(request) {
+                            request.setRequestHeader("Authorization", 'Bearer '+ $('#bearer_token').val());
+                        },
+                        url: url,
+                        data: payload,
+                        success: function(data, statusCode, xhr) {
+                            returnSuccess(data, statusCode, xhr);
+                        },
+                        error: function(data, statusCode, xhr) {
+                            console.log('we are here');
+                            returnError(data);
+                        },
+                        dataType: 'json',
+                        contentType: 'application/json'
                     });
                     e.preventDefault();
                 });
             }
 
-            function success(data, statusCode, xhr) {
-                        console.log('logging: '+ xhr.status);
-                console.log('success');
-                console.log('code: '+ xhr.status);
-                console.log('here now');
+            function returnSuccess(data, statusCode, xhr) {
                 var dataStr = JSON.stringify(data, undefined, 4);
                 $('#status-code').html(xhr.status);
+                $('#response-container').text(dataStr);
+            }
+
+            function returnError(response) {
+                var dataStr = JSON.stringify(response.responseJSON, undefined, 4);
+                $('#status-code').html(response.status);
                 $('#response-container').text(dataStr);
             }
         </script>
@@ -74,16 +90,18 @@
                 <dt>Method:</dt>
                 <dd><select id="method">
                         <option>GET</option>
-                        <option>POST</option>
+                        <option selected="selected">POST</option>
                         <option>PATCH</option>
                         <option>DELETE</option>
                     </select>
                 </dd>
 
                 <dt>Endpoint:</dt>
-                <dd><input type="text" id="endpoint" value="https://reqres.in/api/users?page=2" style="width:500px" /></dd>
+                <dd><input type="text" id="endpoint" value="http://localhost:8000/api/create-user" style="width:500px" /></dd>
             </dl>
-            
+
+            <textarea id="payload"></textarea>
+
             <p>
                 <input type="submit" name="submit" value="submit" />
             </p>
@@ -91,8 +109,6 @@
 
         <h3>Response</h3>
         <p>Status code: <span id="status-code"></span></p>
-        <p>Data: </p>
-        <textarea id="response-container">
-        </textarea>
+        <textarea id="response-container"></textarea>
     </body>
 </html>
